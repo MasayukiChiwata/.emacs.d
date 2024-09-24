@@ -1,0 +1,4 @@
+** キーバインドの設定
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+#+END_SRC
