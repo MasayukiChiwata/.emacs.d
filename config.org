@@ -1,4 +1,293 @@
-** キーバインドの設定
+** 基本設定
+*** 行番号を表示
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-display-line-numbers-mode t)
+#+END_SRC
+
+*** 対応する括弧を強調
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+#+END_SRC
+
+*** スタートアップ画面を非表示
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+#+END_SRC
+
+*** バックアップファイル
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory))))
+  (setq backup-by-copying t)
+#+END_SRC
+
+*** オートセーブファイル
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save-list/" user-emacs-directory) t)))
+#+END_SRC
+
+*** タブをスペースに設定
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+*** yes/NoをY/Nに短縮
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+*** カーソル位置の単語をハイライト
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
+#+END_SRC
+
+*** OSC52によるクリップボード同期の設定
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'clipetty)
+
+  (add-hook 'after-init-hook 'global-clipetty-mode)
+#+END_SRC
+*** メニューバーを非表示
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1)
+#+END_SRC
+
+*** スクロールバーを非表示
+#+BEGIN_SRC emacs-lisp
+  (scroll-bar-mode -1)
+#+END_SRC
+
+*** ターミナルでの色設定の改善
+256色をサポート
+#+BEGIN_SRC emacs-lisp
+  (unless (display-graphic-p)
+    (setq term-terminal-parameter 'xterm-256color))
+#+END_SRC
+*** 対応括弧を自動補完
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'smartparens)
+  (require 'smartparens-config)
+  (smartparens-global-mode 1)
+
+  ;; 括弧内のインデントを調整（必要に応じて）
+  (setq sp-autoescape-string-quote nil)
+#+END_SRC
+
+*** 保存時に不要な空白を削除
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+** ファイラ
+*** dired-subtree
+Diredバッファ内でディレクトリを展開・折りたたみ
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'dired-subtree)
+
+  (require 'dired-subtree)
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dired-mode-map
+      (kbd "p") 'dired-subtree-insert
+      (kbd ";") 'dired-subtree-remove))
+#+END_SRC
+** キーバインド
+*** evil
+#+BEGIN_SRC emacs-lisp
+  (setq evil-want-keybinding nil)
+  (straight-use-package 'evil)
+  (require 'evil)
+  (evil-mode 1)
+#+END_SRC
+*** evil-collection
+https://github.com/emacs-evil/evil-collection
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'evil-collection)
+  (require 'evil-collection)
+  (evil-collection-init)
+#+END_SRC
+
+*** evil-surround
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'evil-surround)
+  (require 'evil-surround)
+  (global-evil-surround-mode 1)
+#+END_SRC
+
+*** evil-commentary
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'evil-commentary)
+  (require 'evil-commentary)
+  (evil-commentary-mode)
+#+END_SRC
+
+*** バッファテキストオブジェクトを定義
+#+BEGIN_SRC emacs-lisp
+  ;; バッファ全体を選択するテキストオブジェクトを定義
+  (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
+    "Select entire buffer."
+    (evil-range (point-min) (point-max) type))
+
+  ;; テキストオブジェクトを「e」に割り当て
+  (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
+  (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
+#+END_SRC
+*** which-key
+#+BEGIN_SRC emacs-lisp
+  ;; which-key：利用可能なキーバインドを表示
+  (straight-use-package 'which-key)
+  (require 'which-key)
+  (which-key-mode)
+#+END_SRC
+** カラーテーマ
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'gruvbox-theme)
+  (load-theme 'gruvbox-dark-medium t)
+
+#+END_SRC
+
+** モード共通
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'eglot)
+  (straight-use-package 'flycheck)
+#+END_SRC
+
+*** company
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'company)
+
+  (add-hook 'after-init-hook 'global-company-mode)
+
+  (setq company-backends '(company-capf))
+
+  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0.0) ;; デフォルトは0.2
+#+END_SRC
+
+*** ファジーファインダー
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'ivy)
+  (straight-use-package 'counsel)
+  (straight-use-package 'swiper)
+  (straight-use-package 'projectile)
+  (straight-use-package 'counsel-projectile)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;; Ivyの設定
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (setq ivy-count-format "(%d/%d) ")
+
+  ;; ファジーマッチングを有効化
+  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+
+  ;; Counselの設定
+  (counsel-mode 1)
+
+  ;; Swiperの設定（すでに設定済みの場合は不要）
+  (global-set-key "\C-s" 'swiper)
+#+END_SRC
+
+
+Projectile設定
+#+BEGIN_SRC emacs-lisp
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+  ;; プロジェクト内のファイルをファジー検索
+  (setq projectile-completion-system 'ivy)
+
+  ;; ProjectileとCounselの連携
+  (counsel-projectile-mode)
+#+END_SRC
+
+
+キーバインド
+#+BEGIN_SRC emacs-lisp
+  ;; ファイルを開く（ファジー検索）
+  (global-set-key (kbd "C-x f") 'counsel-find-file)
+
+  ;; 最近使ったファイルを開く
+  (global-set-key (kbd "C-x C-r") 'counsel-recentf)
+
+  ;; プロジェクト内のファイルを検索
+  (global-set-key (kbd "C-c p f") 'counsel-projectile-find-file)
+
+  ;; バッファを切り替える（ファジー検索）
+  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+#+END_SRC
+** ターミナル
+*** vterm
+
+事前にインストールしておく。
+#+BEGIN_SRC
+sudo apt install libvterm-dev
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'vterm)
+
+  (require 'vterm)
+
+  ;; F9キーでvtermを起動
+  (global-set-key [f9] 'vterm)
+#+END_SRC
+
+** Tramp
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'docker-tramp)
+
+  (require 'docker-tramp)
+#+END_SRC
+** orgモード
+*** タブで開閉
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'org
+    (define-key org-mode-map (kbd "TAB") 'org-cycle))
+
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
+    (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
+#+END_SRC
+
+*** コードブロックではネイティブモードのTAB動作
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-tab-acts-natively t)
+#+END_SRC
+
+*** インデントモード
+見出しやリストなどの階層構造に応じて自動的にインデントを調整する
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+END_SRC
+*** 保存時にバッファ全体をインデント
+#+BEGIN_SRC emacs-lisp
+  ;; Orgモードで保存時にバッファ全体をインデントする関数
+  (defun my-org-indent-buffer ()
+    "Indent the entire buffer when saving in Org mode."
+    (when (eq major-mode 'org-mode)
+      (indent-region (point-min) (point-max))))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'my-org-indent-buffer nil 'local)))
+#+END_SRC
+** TypeScriptモード
+*** 拡張子紐づけ
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'typescript-mode)
+  (require 'typescript-mode)
+
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+#+END_SRC
+*** eglot自動起動
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'typescript-mode-hook 'eglot-ensure)
+#+END_SRC
+
+LSPサーバーのインストール
+#+BEGIN_SRC
+npm install -g typescript-language-server typescript
 #+END_SRC

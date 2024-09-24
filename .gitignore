@@ -1,5 +1,9 @@
 auto-save-list/
+backups/
 straight/
 
 config.el
-
+projectile-bookmarks.eld
+tramp
+projects
+recentf
