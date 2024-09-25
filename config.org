@@ -254,11 +254,11 @@ sudo apt install libvterm-dev
 *** タブで開閉
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "tab") 'org-cycle))
+    (define-key org-mode-map (kbd "TAB") 'org-cycle))
 
   (with-eval-after-load 'evil
-    (define-key evil-normal-state-map (kbd "tab") 'org-cycle)
-    (define-key evil-motion-state-map (kbd "tab") 'org-cycle))
+    (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
+    (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
 #+end_src
 
 *** コードブロックではネイティブモードのTAB動作
@@ -310,3 +310,10 @@ M-x revert-buffer
 
 *** マルチホップ
 /ssh:ユーザー名@リモートホスト|docker:コンテナID:/パス/to/ファイル
+
+*** org-mode
+**** 見出し間のジャンプ
+C-c C-n, C-c C-p
+
+**** 一括開閉
+C-u C-i
