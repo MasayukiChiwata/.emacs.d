@@ -237,9 +237,9 @@ sudo apt install libvterm-dev
 
 ** Tramp
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'docker-tramp)
+  ;; (straight-use-package 'docker-tramp)
 
-  (require 'docker-tramp)
+  ;; (require 'docker-tramp)
 #+END_SRC
 ** orgモード
 *** タブで開閉

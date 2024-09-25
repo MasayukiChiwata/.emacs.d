@@ -1,6 +1,7 @@
 auto-save-list/
 backups/
 straight/
+eln-cache/
 
 config.el
 projectile-bookmarks.eld
