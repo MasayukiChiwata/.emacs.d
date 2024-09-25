@@ -52,6 +52,11 @@
   (menu-bar-mode -1)
 #+END_SRC
 
+*** ツールバーを非表示
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode 0)
+#+END_SRC
+
 *** スクロールバーを非表示
 #+BEGIN_SRC emacs-lisp
   (scroll-bar-mode -1)
@@ -141,9 +146,13 @@ https://github.com/emacs-evil/evil-collection
 #+END_SRC
 ** カラーテーマ
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'gruvbox-theme)
-  (load-theme 'gruvbox-dark-medium t)
+  (straight-use-package 'doom-themes)
 
+  (require 'doom-themes)
+
+  (load-theme 'doom-one t)
+
+  (doom-themes-org-config)
 #+END_SRC
 
 ** モード共通
@@ -227,12 +236,12 @@ sudo apt install libvterm-dev
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'vterm)
+  ;; (straight-use-package 'vterm)
 
-  (require 'vterm)
+  ;; (require 'vterm)
 
-  ;; F9キーでvtermを起動
-  (global-set-key [f9] 'vterm)
+  ;; ;; F9キーでvtermを起動
+  ;; (global-set-key [f9] 'vterm)
 #+END_SRC
 
 ** Tramp
@@ -243,14 +252,14 @@ sudo apt install libvterm-dev
 #+END_SRC
 ** orgモード
 *** タブで開閉
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "TAB") 'org-cycle))
+    (define-key org-mode-map (kbd "tab") 'org-cycle))
 
   (with-eval-after-load 'evil
-    (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
-    (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
-#+END_SRC
+    (define-key evil-normal-state-map (kbd "tab") 'org-cycle)
+    (define-key evil-motion-state-map (kbd "tab") 'org-cycle))
+#+end_src
 
 *** コードブロックではネイティブモードのTAB動作
 #+BEGIN_SRC emacs-lisp
@@ -291,3 +300,13 @@ LSPサーバーのインストール
 #+BEGIN_SRC
 npm install -g typescript-language-server typescript
 #+END_SRC
+
+** Tips
+*** 選択範囲を評価
+M-x eval-region
+
+*** バッファをリロード
+M-x revert-buffer
+
+*** マルチホップ
+/ssh:ユーザー名@リモートホスト|docker:コンテナID:/パス/to/ファイル
