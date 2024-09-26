@@ -2,9 +2,14 @@ auto-save-list/
 backups/
 straight/
 eln-cache/
+org-persist/
+server/
+transient/
+
 
 config.el
 projectile-bookmarks.eld
+projectile.cache
 tramp
 projects
 recentf

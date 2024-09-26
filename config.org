@@ -1,3 +1,11 @@
+** 関数
+*** OS判定
+#+BEGIN_SRC emacs-lisp
+  (defconst IS-MAC (eq system-type 'darwin))
+  (defconst IS-LINUX (memq system-type '(gnu gnu/linux gnu/kfreebsd berkeley-unix)))
+  (defconst IS-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
+#+END_SRC
+
 ** 基本設定
 *** 行番号を表示
 #+BEGIN_SRC emacs-lisp
@@ -81,6 +89,43 @@
 *** 保存時に不要な空白を削除
 #+BEGIN_SRC emacs-lisp
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+*** 削除したファイルをゴミ箱へ移動する
+#+BEGIN_SRC emacs-lisp
+  (setq delete-by-moving-to-trash t)
+#+END_SRC
+
+*** 末尾のスペースを可視化
+#+BEGIN_SRC emacs-lisp
+  (setq-default show-trailing-whitespace t)
+#+END_SRC
+*** スクロール高速化
+#+BEGIN_SRC emacs-lisp
+  (setq fast-but-imprecise-scrolling t)
+#+END_SRC
+*** native-compの警告を表示しない
+#+BEGIN_SRC emacs-lisp
+  (setq native-comp-async-report-warnings-errors 'silent)
+#+END_SRC
+
+*** Windows最適化
+#+BEGIN_SRC emacs-lisp
+  (when IS-WINDOWS
+    (setq w32-get-true-file-attributes nil
+          w32-pipe-read-delay 0
+          w32-pipe-buffer-size (* 64 1024)))
+#+END_SRC
+*** 各OSの最適化
+#+BEGIN_SRC emacs-lisp
+  (when IS-WINDOWS
+    (setq w32-use-native-image-API t))
+
+  (unless IS-MAC
+    (setq command-line-ns-option-alist nil))
+
+  (unless IS-LINUX
+    (setq command-line-x-option-alist nil))
 #+END_SRC
 
 ** ファイラ
@@ -254,6 +299,34 @@ sudo apt install libvterm-dev
 
   ;; (require 'docker-tramp)
 #+END_SRC
+** undo
+*** undo-fu
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'undo-fu)
+  (with-eval-after-load 'evil
+    (setq evil-undo-system 'undo-fu))
+#+END_SRC
+*** undo-fu-session
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'undo-fu-session)
+  (undo-fu-session-global-mode +1)
+#+END_SRC
+
+** restart-emacs
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'restart-emacs)
+#+END_SRC
+** pulsar
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'pulsar)
+  (pulsar-global-mode +1)
+#+END_SRC
+** rainbow-delimiters
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'rainbow-delimiters)
+  (require 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+#+END_SRC
 ** orgモード
 *** タブで開閉
 #+begin_src emacs-lisp
@@ -286,6 +359,13 @@ sudo apt install libvterm-dev
   (add-hook 'org-mode-hook
             (lambda ()
               (add-hook 'before-save-hook 'my-org-indent-buffer nil 'local)))
+#+END_SRC
+
+*** リンクを開く
+#+BEGIN_SRC emacs-lisp
+  (setq org-return-follows-link t  ; Returnキーでリンク先を開く
+        org-mouse-1-follows-link t ; マウスクリックでリンク先を開く
+        )
 #+END_SRC
 ** TypeScriptモード
 *** 拡張子紐づけ
