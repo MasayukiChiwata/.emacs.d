@@ -316,11 +316,6 @@ sudo apt install libvterm-dev
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'restart-emacs)
 #+END_SRC
-** pulsar
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package 'pulsar)
-  (pulsar-global-mode +1)
-#+END_SRC
 ** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'rainbow-delimiters)

@@ -5,6 +5,7 @@ eln-cache/
 org-persist/
 server/
 transient/
+undo-fu-session/
 
 
 config.el
