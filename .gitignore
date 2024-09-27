@@ -7,7 +7,6 @@ server/
 transient/
 undo-fu-session/
 
-
 config.el
 projectile-bookmarks.eld
 projectile.cache

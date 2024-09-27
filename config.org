@@ -190,6 +190,28 @@ https://github.com/emacs-evil/evil-collection
   (require 'which-key)
   (which-key-mode)
 #+END_SRC
+*** general.el
+#+BEGIN_SRC emacs-lisp
+  ;; general.elパッケージをインストール
+  (straight-use-package 'general)
+
+  ;; general.elを読み込む
+  (require 'general)
+  ;; リーダーキーをSPCに設定
+  (general-create-definer my/leader-key-def
+    :states '(normal visual motion)
+    :keymaps 'override
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (my/leader-key-def
+    "f" 'counsel-find-file
+    "p f" 'counsel-projectile-find-file
+    "r f" 'counsel-recentf
+    "b" 'ivy-switch-buffer
+    "x" 'execute-extended-command
+    )
+#+END_SRC
 ** カラーテーマ
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'doom-themes)
