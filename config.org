@@ -50,12 +50,6 @@
   (global-set-key (kbd "C-c h") 'highlight-symbol-at-point)
 #+END_SRC
 
-*** OSC52によるクリップボード同期の設定
-#+BEGIN_SRC emacs-lisp
-  (straight-use-package 'clipetty)
-
-  (add-hook 'after-init-hook 'global-clipetty-mode)
-#+END_SRC
 *** メニューバーを非表示
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1)
@@ -77,14 +71,6 @@
   (unless (display-graphic-p)
     (setq term-terminal-parameter 'xterm-256color))
 #+END_SRC
-*** 対応括弧を自動補完
-#+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :config
-    (require 'smartparens-config)
-    (smartparens-global-mode 1))
-#+END_SRC
-
 *** 保存時に不要な空白を削除
 #+BEGIN_SRC emacs-lisp
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -127,8 +113,23 @@
     (setq command-line-x-option-alist nil))
 #+END_SRC
 
+** clipetty(OSC52)
+#+BEGIN_SRC emacs-lisp
+  (use-package clipetty
+    :hook (after-init . global-clipetty-mode)
+    )
+#+END_SRC
+** smartparens
+括弧を自動補完する。
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode 1))
+#+END_SRC
+
 ** dired-subtree
-Diredバッファ内でディレクトリを展開・折りたたみ
+Diredバッファ内でディレクトリを展開・折りたたみ。
 #+BEGIN_SRC emacs-lisp
   (use-package dired-subtree
     :after evil
@@ -212,7 +213,7 @@ https://github.com/emacs-evil/evil-collection
       "b"   'ivy-switch-buffer
       "x"   'execute-extended-command))
 #+END_SRC
-** カラーテーマ
+** doom-themes
 #+BEGIN_SRC emacs-lisp
   (use-package doom-themes
     :config
@@ -243,63 +244,45 @@ https://github.com/emacs-evil/evil-collection
 
 ** ファジーファインダー
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'ivy)
-  (straight-use-package 'counsel)
-  (straight-use-package 'swiper)
-  (straight-use-package 'projectile)
-  (straight-use-package 'counsel-projectile)
+  (use-package ivy
+    :custom
+    (ivy-use-virtual-buffers t)
+    (enable-recursive-minibuffers t)
+    (ivy-count-format "(%d/%d) ")
+    (ivy-re-builders-alist '((t . ivy--regex-fuzzy))) ;; ファジーマッチングを有効化
+    :config
+    (ivy-mode 1)
+    )
+
+  (use-package counsel
+    :config
+    (counsel-mode 1)
+    )
+
+  (use-package swiper
+    :config
+    (global-set-key "\C-s" 'swiper)
+    )
+
+  (use-package projectile
+    :custom
+    (projectile-completion-system 'ivy)
+    :config
+    (projectile-mode +1)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    )
+
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode) ;; counselと連携
+    )
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  ;; Ivyの設定
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-count-format "(%d/%d) ")
-
-  ;; ファジーマッチングを有効化
-  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-
-  ;; Counselの設定
-  (counsel-mode 1)
-
-  ;; Swiperの設定（すでに設定済みの場合は不要）
-  (global-set-key "\C-s" 'swiper)
-#+END_SRC
-
-
-Projectile設定
-#+BEGIN_SRC emacs-lisp
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-  ;; プロジェクト内のファイルをファジー検索
-  (setq projectile-completion-system 'ivy)
-
-  ;; ProjectileとCounselの連携
-  (counsel-projectile-mode)
-#+END_SRC
-
-
-キーバインド
-#+BEGIN_SRC emacs-lisp
-  ;; ファイルを開く（ファジー検索）
-  (global-set-key (kbd "C-x f") 'counsel-find-file)
-
-  ;; 最近使ったファイルを開く
-  (global-set-key (kbd "C-x C-r") 'counsel-recentf)
-
-  ;; プロジェクト内のファイルを検索
-  (global-set-key (kbd "C-c p f") 'counsel-projectile-find-file)
-
-  ;; バッファを切り替える（ファジー検索）
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-#+END_SRC
 ** magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit)
 #+END_SRC
-** undo
+** undo-fu
 *** undo-fu
 #+BEGIN_SRC emacs-lisp
   (use-package undo-fu)
@@ -319,21 +302,11 @@ Projectile設定
 #+END_SRC
 ** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'rainbow-delimiters)
-  (require 'rainbow-delimiters)
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode)
+    )
 #+END_SRC
 ** org-mode
-*** タブで開閉
-#+begin_src emacs-lisp
-  ;; (with-eval-after-load 'org
-  ;;   (define-key org-mode-map (kbd "TAB") 'org-cycle))
-
-  ;; (with-eval-after-load 'evil
-  ;;   (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
-  ;;   (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
-#+end_src
-
 *** コードブロックではネイティブモードのTAB動作
 #+BEGIN_SRC emacs-lisp
   (setq org-src-tab-acts-natively t)
@@ -363,17 +336,14 @@ Projectile設定
         )
 #+END_SRC
 ** typescript-mode
-*** 拡張子紐づけ
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'typescript-mode)
-  (require 'typescript-mode)
+  (use-package typescript-mode
+    :hook (typescript-mode . eglot-ensure)
+    :config
+    (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+    )
+#+END_SRC
 
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-#+END_SRC
-*** eglot自動起動
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'typescript-mode-hook 'eglot-ensure)
-#+END_SRC
 
 LSPサーバーのインストール
 #+BEGIN_SRC
