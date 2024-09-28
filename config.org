@@ -145,6 +145,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ
 *** evil
 #+BEGIN_SRC emacs-lisp
   (setq evil-want-keybinding nil)
+  (setq evil-undo-system 'undo-fu)
   (straight-use-package 'evil)
   (require 'evil)
   (evil-mode 1)
@@ -215,11 +216,8 @@ https://github.com/emacs-evil/evil-collection
 ** カラーテーマ
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'doom-themes)
-
   (require 'doom-themes)
-
   (load-theme 'doom-one t)
-
   (doom-themes-org-config)
 #+END_SRC
 
@@ -295,23 +293,6 @@ Projectile設定
   ;; バッファを切り替える（ファジー検索）
   (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
 #+END_SRC
-** ターミナル
-*** vterm
-
-事前にインストールしておく。
-#+BEGIN_SRC
-sudo apt install libvterm-dev
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  ;; (straight-use-package 'vterm)
-
-  ;; (require 'vterm)
-
-  ;; ;; F9キーでvtermを起動
-  ;; (global-set-key [f9] 'vterm)
-#+END_SRC
-
 ** magit
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'magit)
@@ -326,8 +307,6 @@ sudo apt install libvterm-dev
 *** undo-fu
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'undo-fu)
-  (with-eval-after-load 'evil
-    (setq evil-undo-system 'undo-fu))
 #+END_SRC
 *** undo-fu-session
 #+BEGIN_SRC emacs-lisp
