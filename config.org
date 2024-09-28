@@ -145,6 +145,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ
 #+BEGIN_SRC emacs-lisp
   (setq evil-want-keybinding nil)
   (setq evil-undo-system 'undo-fu)
+  (setq evil-want-C-i-jump nil) ;; C-iをTabに割当て
   (straight-use-package 'evil)
   (require 'evil)
   (evil-mode 1)
@@ -195,6 +196,7 @@ https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp
   ;; general.elパッケージをインストール
   (straight-use-package 'general)
+
 
   ;; general.elを読み込む
   (require 'general)
@@ -330,12 +332,12 @@ Projectile設定
 ** org-mode
 *** タブで開閉
 #+begin_src emacs-lisp
-  (with-eval-after-load 'org
-    (define-key org-mode-map (kbd "TAB") 'org-cycle))
+  ;; (with-eval-after-load 'org
+  ;;   (define-key org-mode-map (kbd "TAB") 'org-cycle))
 
-  (with-eval-after-load 'evil
-    (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
-    (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
+  ;; (with-eval-after-load 'evil
+  ;;   (define-key evil-normal-state-map (kbd "TAB") 'org-cycle)
+  ;;   (define-key evil-motion-state-map (kbd "TAB") 'org-cycle))
 #+end_src
 
 *** コードブロックではネイティブモードのTAB動作
@@ -350,7 +352,6 @@ Projectile設定
 #+END_SRC
 *** 保存時にバッファ全体をインデント
 #+BEGIN_SRC emacs-lisp
-  ;; Orgモードで保存時にバッファ全体をインデントする関数
   (defun my-org-indent-buffer ()
     "Indent the entire buffer when saving in Org mode."
     (when (eq major-mode 'org-mode)
