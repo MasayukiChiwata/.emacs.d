@@ -79,12 +79,10 @@
 #+END_SRC
 *** 対応括弧を自動補完
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'smartparens)
-  (require 'smartparens-config)
-  (smartparens-global-mode 1)
-
-  ;; 括弧内のインデントを調整（必要に応じて）
-  (setq sp-autoescape-string-quote nil)
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode 1))
 #+END_SRC
 
 *** 保存時に不要な空白を削除
@@ -132,116 +130,115 @@
 ** dired-subtree
 Diredバッファ内でディレクトリを展開・折りたたみ
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'dired-subtree)
-
-  (require 'dired-subtree)
-  (with-eval-after-load 'evil
+  (use-package dired-subtree
+    :after evil
+    :config
     (evil-define-key 'normal dired-mode-map
       (kbd "p") 'dired-subtree-insert
-      (kbd ";") 'dired-subtree-remove))
+      (kbd ";") 'dired-subtree-remove)
+    )
 #+END_SRC
 ** evil
 *** evil
 #+BEGIN_SRC emacs-lisp
-  (setq evil-want-keybinding nil)
-  (setq evil-undo-system 'undo-fu)
-  (setq evil-want-C-i-jump nil) ;; C-iをTabに割当て
-  (straight-use-package 'evil)
-  (require 'evil)
-  (evil-mode 1)
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-undo-system 'undo-fu)
+    (setq evil-want-C-i-jump nil) ;; C-iをTabに割当て
+    :config
+    (evil-mode 1)
+
+    ;; バッファ全体を選択するテキストオブジェクトを定義
+    (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
+      "Select entire buffer."
+      (evil-range (point-min) (point-max) type))
+
+    (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
+    (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
+    )
 #+END_SRC
 
 *** evil-collection
 https://github.com/emacs-evil/evil-collection
 
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'evil-collection)
-  (require 'evil-collection)
-  (evil-collection-init)
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init)
+    )
 #+END_SRC
 
 *** evil-surround
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'evil-surround)
-  (require 'evil-surround)
-  (global-evil-surround-mode 1)
+  (use-package evil-surround
+    :after evil
+    :config
+    (global-evil-surround-mode 1)
+    )
 #+END_SRC
 
 *** evil-commentary
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'evil-commentary)
-  (require 'evil-commentary)
-  (evil-commentary-mode)
+  (use-package evil-commentary
+    :after evil
+    :config
+    (evil-commentary-mode)
+    )
 #+END_SRC
 
-*** バッファテキストオブジェクトを定義
-#+BEGIN_SRC emacs-lisp
-  ;; バッファ全体を選択するテキストオブジェクトを定義
-  (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
-    "Select entire buffer."
-    (evil-range (point-min) (point-max) type))
-
-  ;; テキストオブジェクトを「e」に割り当て
-  (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
-  (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
-#+END_SRC
 ** which-key
 #+BEGIN_SRC emacs-lisp
-  ;; which-key：利用可能なキーバインドを表示
-  (straight-use-package 'which-key)
-  (require 'which-key)
-  (which-key-mode)
+  (use-package which-key
+    :config
+    (which-key-mode)
+    )
 #+END_SRC
 ** general.el
 #+BEGIN_SRC emacs-lisp
-  ;; general.elパッケージをインストール
-  (straight-use-package 'general)
+  (use-package general
+    :config
+    (general-create-definer my/leader-key-def
+      :states '(normal visual motion)
+      :keymaps 'override
+      :prefix "SPC"
+      :global-prefix "C-SPC")
 
-
-  ;; general.elを読み込む
-  (require 'general)
-  ;; リーダーキーをSPCに設定
-  (general-create-definer my/leader-key-def
-    :states '(normal visual motion)
-    :keymaps 'override
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (my/leader-key-def
-    "f" 'counsel-find-file
-    "p f" 'counsel-projectile-find-file
-    "r f" 'counsel-recentf
-    "b" 'ivy-switch-buffer
-    "x" 'execute-extended-command
-    )
+    (my/leader-key-def
+      "f"   'counsel-find-file
+      "p f" 'counsel-projectile-find-file
+      "r f" 'counsel-recentf
+      "b"   'ivy-switch-buffer
+      "x"   'execute-extended-command))
 #+END_SRC
 ** カラーテーマ
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'doom-themes)
-  (require 'doom-themes)
-  (load-theme 'doom-one t)
-  (doom-themes-org-config)
+  (use-package doom-themes
+    :config
+    (load-theme 'doom-one t)
+    (doom-themes-org-config)
+    )
 #+END_SRC
 
 ** eglot
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'eglot)
+  (use-package eglot)
 #+END_SRC
 
 ** flycheck
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'flycheck)
+  (use-package flycheck)
 #+END_SRC
 ** company
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'company)
-
-  (add-hook 'after-init-hook 'global-company-mode)
-
-  (setq company-backends '(company-capf))
-
-  (setq company-minimum-prefix-length 1)
-  (setq company-idle-delay 0.0) ;; デフォルトは0.2
+  (use-package company
+    :hook (after-init . global-company-mode)
+    :custom
+    (company-backends '(company-capf))
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0)
+    )
 #+END_SRC
 
 ** ファジーファインダー
@@ -300,28 +297,25 @@ Projectile設定
 #+END_SRC
 ** magit
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'magit)
-#+END_SRC
-** Tramp
-#+BEGIN_SRC emacs-lisp
-  ;; (straight-use-package 'docker-tramp)
-
-  ;; (require 'docker-tramp)
+  (use-package magit)
 #+END_SRC
 ** undo
 *** undo-fu
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'undo-fu)
+  (use-package undo-fu)
 #+END_SRC
 *** undo-fu-session
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'undo-fu-session)
-  (undo-fu-session-global-mode +1)
+  (use-package undo-fu-session
+    :after undo-fu
+    :config
+    (undo-fu-session-global-mode +1)
+    )
 #+END_SRC
 
 ** restart-emacs
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'restart-emacs)
+  (use-package restart-emacs)
 #+END_SRC
 ** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp

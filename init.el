@@ -1,7 +1,3 @@
-;;; package --- Summary
-;;; Commentary:
-;;; Code:
-    
 ;; パッケージマネージャーのインストール
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -15,6 +11,9 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
