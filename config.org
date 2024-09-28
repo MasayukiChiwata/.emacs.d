@@ -129,8 +129,7 @@
     (setq command-line-x-option-alist nil))
 #+END_SRC
 
-** ファイラ
-*** dired-subtree
+** dired-subtree
 Diredバッファ内でディレクトリを展開・折りたたみ
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'dired-subtree)
@@ -141,7 +140,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ
       (kbd "p") 'dired-subtree-insert
       (kbd ";") 'dired-subtree-remove))
 #+END_SRC
-** キーバインド
+** evil
 *** evil
 #+BEGIN_SRC emacs-lisp
   (setq evil-want-keybinding nil)
@@ -150,6 +149,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ
   (require 'evil)
   (evil-mode 1)
 #+END_SRC
+
 *** evil-collection
 https://github.com/emacs-evil/evil-collection
 
@@ -184,14 +184,14 @@ https://github.com/emacs-evil/evil-collection
   (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
   (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
 #+END_SRC
-*** which-key
+** which-key
 #+BEGIN_SRC emacs-lisp
   ;; which-key：利用可能なキーバインドを表示
   (straight-use-package 'which-key)
   (require 'which-key)
   (which-key-mode)
 #+END_SRC
-*** general.el
+** general.el
 #+BEGIN_SRC emacs-lisp
   ;; general.elパッケージをインストール
   (straight-use-package 'general)
@@ -221,13 +221,16 @@ https://github.com/emacs-evil/evil-collection
   (doom-themes-org-config)
 #+END_SRC
 
-** モード共通
+** eglot
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'eglot)
-  (straight-use-package 'flycheck)
 #+END_SRC
 
-*** company
+** flycheck
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'flycheck)
+#+END_SRC
+** company
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'company)
 
@@ -239,7 +242,7 @@ https://github.com/emacs-evil/evil-collection
   (setq company-idle-delay 0.0) ;; デフォルトは0.2
 #+END_SRC
 
-*** ファジーファインダー
+** ファジーファインダー
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'ivy)
   (straight-use-package 'counsel)
@@ -324,7 +327,7 @@ Projectile設定
   (require 'rainbow-delimiters)
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 #+END_SRC
-** orgモード
+** org-mode
 *** タブで開閉
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
@@ -364,7 +367,7 @@ Projectile設定
         org-mouse-1-follows-link t ; マウスクリックでリンク先を開く
         )
 #+END_SRC
-** TypeScriptモード
+** typescript-mode
 *** 拡張子紐づけ
 #+BEGIN_SRC emacs-lisp
   (straight-use-package 'typescript-mode)
