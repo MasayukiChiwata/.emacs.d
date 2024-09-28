@@ -131,87 +131,14 @@
 ** dired-subtree
 Diredバッファ内でディレクトリを展開・折りたたみ。
 #+BEGIN_SRC emacs-lisp
-  (use-package dired-subtree
-    :after evil
-    :config
-    (evil-define-key 'normal dired-mode-map
-      (kbd "p") 'dired-subtree-insert
-      (kbd ";") 'dired-subtree-remove)
-    )
+  (use-package dired-subtree)
 #+END_SRC
-** evil
-*** evil
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :init
-    (setq evil-want-keybinding nil)
-    (setq evil-undo-system 'undo-fu)
-    (setq evil-want-C-i-jump nil) ;; C-iをTabに割当て
-    :config
-    (evil-mode 1)
-
-    ;; バッファ全体を選択するテキストオブジェクトを定義
-    (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
-      "Select entire buffer."
-      (evil-range (point-min) (point-max) type))
-
-    (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
-    (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
-    )
-#+END_SRC
-
-*** evil-collection
-https://github.com/emacs-evil/evil-collection
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :config
-    (evil-collection-init)
-    )
-#+END_SRC
-
-*** evil-surround
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-surround
-    :after evil
-    :config
-    (global-evil-surround-mode 1)
-    )
-#+END_SRC
-
-*** evil-commentary
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-commentary
-    :after evil
-    :config
-    (evil-commentary-mode)
-    )
-#+END_SRC
-
 ** which-key
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :config
     (which-key-mode)
     )
-#+END_SRC
-** general.el
-#+BEGIN_SRC emacs-lisp
-  (use-package general
-    :config
-    (general-create-definer my/leader-key-def
-      :states '(normal visual motion)
-      :keymaps 'override
-      :prefix "SPC"
-      :global-prefix "C-SPC")
-
-    (my/leader-key-def
-      "f"   'counsel-find-file
-      "p f" 'counsel-projectile-find-file
-      "r f" 'counsel-recentf
-      "b"   'ivy-switch-buffer
-      "x"   'execute-extended-command))
 #+END_SRC
 ** doom-themes
 #+BEGIN_SRC emacs-lisp
