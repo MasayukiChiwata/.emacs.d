@@ -113,6 +113,12 @@
     (setq command-line-x-option-alist nil))
 #+END_SRC
 
+*** C-h -> BS
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-h") 'delete-backward-char)
+  (global-set-key (kbd "<f1>") 'help-command)
+#+END_SRC
+
 ** clipetty(OSC52)
 #+BEGIN_SRC emacs-lisp
   (use-package clipetty
