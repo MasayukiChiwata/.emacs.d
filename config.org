@@ -257,9 +257,12 @@ https://github.com/emacs-evil/evil-collection
       (newline-and-indent))
     :bind (:map company-active-map
                 ("<tab>" . company-complete-selection)
-                ("RET" . my/company-abort-and-newline-and-indent)
-                ("<return>" . my/company-abort-and-newline-and-indent)
-                ("C-m" . my/company-abort-and-newline-and-indent)
+                ;; ("RET" . my/company-abort-and-newline-and-indent)
+                ;; ("<return>" . my/company-abort-and-newline-and-indent)
+                ;; ("C-m" . my/company-abort-and-newline-and-indent)
+                ("RET" . company-abort)
+                ("<return>" . company-abort)
+                ("C-m" . company-abort)
                 )
     )
 #+END_SRC
@@ -404,6 +407,24 @@ https://github.com/emacs-evil/evil-collection
 LSPサーバーのインストール
 #+BEGIN_SRC
 npm install -g typescript-language-server typescript
+#+END_SRC
+
+** c++-mode
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'c++-mode-hook #'eglot-ensure)
+#+END_SRC
+
+** dockerfile-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package dockerfile-mode
+    :config
+    (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+    )
+#+END_SRC
+
+** docker-compose-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package docker-compose-mode)
 #+END_SRC
 
 ** Tips
