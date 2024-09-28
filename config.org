@@ -113,6 +113,7 @@
     (setq command-line-x-option-alist nil))
 #+END_SRC
 
+** keybind
 *** C-h -> BS
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-h") 'delete-backward-char)
@@ -146,13 +147,17 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     (which-key-mode)
     )
 #+END_SRC
-** doom-themes
+** theme
 #+BEGIN_SRC emacs-lisp
-  (use-package doom-themes
+  (use-package emacs
     :config
-    (load-theme 'doom-one t)
-    (doom-themes-org-config)
-    )
+    (require-theme 'modus-themes)
+
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs nil)
+
+    (load-theme 'modus-vivendi)
+    (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 #+END_SRC
 
 ** eglot
@@ -168,10 +173,18 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :hook (after-init . global-company-mode)
+    :bind
+    ("C-c m" . company-complete) ;; 補完を起動する
+    (:map company-active-map
+          ("<return>" . nil)
+          ("RET" . nil)
+          ("<tab>" . company-complete-selection))
     :custom
     (company-backends '((company-capf company-yasnippet)))
-    (company-minimum-prefix-length 1)
+    (company-minimum-prefix-length 2)
+    (company-selection-wrap-around t) ;; 候補の一番下の更に下を一番上につなげる
     (company-idle-delay 0.0)
+    (company-inhibit-inside-symbols t)
     :config
     ;; capfとyasnippetを合成する関数。
     (defun my/company-capf-and-yasnippet ()
@@ -181,22 +194,6 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 
     ;; eglot使用時にバックエンドを調整
     (add-hook 'eglot-managed-mode-hook #'my/company-capf-and-yasnippet)
-
-    ;; 補完を無視して改行する関数。
-    (defun my/company-abort-and-newline-and-indent ()
-      "Abort company completion and insert a newline, then indent."
-      (interactive)
-      (company-abort)
-      (newline-and-indent))
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection)
-                ;; ("RET" . my/company-abort-and-newline-and-indent)
-                ;; ("<return>" . my/company-abort-and-newline-and-indent)
-                ;; ("C-m" . my/company-abort-and-newline-and-indent)
-                ("RET" . company-abort)
-                ("<return>" . company-abort)
-                ("C-m" . company-abort)
-                )
     )
 #+END_SRC
 
@@ -298,6 +295,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     :hook (prog-mode . rainbow-delimiters-mode)
     )
 #+END_SRC
+
 ** org-mode
 *** コードブロックではネイティブモードのTAB動作
 #+BEGIN_SRC emacs-lisp
