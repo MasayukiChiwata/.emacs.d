@@ -6,6 +6,7 @@ org-persist/
 server/
 transient/
 undo-fu-session/
+var/
 
 config.el
 projectile-bookmarks.eld
