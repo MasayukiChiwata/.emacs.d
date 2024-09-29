@@ -18,11 +18,6 @@
     (add-to-list 'default-frame-alist '(font . "PlemolJP35 Console NF-10")))
 #+END_SRC
 
-*** 行番号を表示
-#+BEGIN_SRC emacs-lisp
-  (global-display-line-numbers-mode t)
-#+END_SRC
-
 *** 対応する括弧を強調
 #+BEGIN_SRC emacs-lisp
   (show-paren-mode t)
@@ -131,6 +126,11 @@
   (global-set-key (kbd "<f1>") 'help-command)
 #+END_SRC
 
+*** 行番号トグル
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
+#+END_SRC
+
 ** clipetty(OSC52)
 #+BEGIN_SRC emacs-lisp
   (use-package clipetty
@@ -152,6 +152,23 @@
            )
     :custom
     (vterm-max-scrollback 10000)
+    )
+#+END_SRC
+
+*** [[https://github.com/jixiuf/vterm-toggle][vterm-toggle]]
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm-toggle
+    :bind ("C-c l" . 'vterm-toggle)
+    :config
+    ;; 現在のウィンドウに vterm バッファを表示する。
+    (setq vterm-toggle-fullscreen-p nil)
+    (add-to-list 'display-buffer-alist
+                 '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                   (display-buffer-reuse-window display-buffer-same-window)))
     )
 #+END_SRC
 
