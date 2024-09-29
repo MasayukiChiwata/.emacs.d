@@ -145,9 +145,11 @@
   sudo apt install cmake libtool libtool-bin
 #+END_SRC
 
-
 #+BEGIN_SRC emacs-lisp
-  (use-package vterm)
+  (use-package vterm
+    :hook ((vterm-mode . (lambda () (display-line-numbers-mode 0)))
+           (vterm-mode . (lambda ()   (setq show-trailing-whitespace nil)))
+           ))
 #+END_SRC
 
 ** smartparens
@@ -251,7 +253,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 #+END_SRC
 
-** ファジーファインダー
+** ivy
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :custom
@@ -262,18 +264,30 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     :config
     (ivy-mode 1)
     )
+#+END_SRC
 
+** counsel
+#+BEGIN_SRC emacs-lisp
   (use-package counsel
+    :after (ivy)
     :config
     (counsel-mode 1)
     )
+#+END_SRC
 
+** swiper
+#+BEGIN_SRC emacs-lisp
   (use-package swiper
+    :after (ivy)
     :config
     (global-set-key "\C-s" 'swiper)
     )
+#+END_SRC
 
+** projectile
+#+BEGIN_SRC emacs-lisp
   (use-package projectile
+    :after (ivy)
     :custom
     (projectile-completion-system 'ivy)
     :config
@@ -282,6 +296,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 
   (use-package counsel-projectile
+    :after (projectile counsel)
     :config
     (counsel-projectile-mode) ;; counselと連携
     )
@@ -393,4 +408,4 @@ M-x revert-buffer
 C-c C-n, C-c C-p
 
 *** 一括開閉
-C-u C-i
+C-u C-test
