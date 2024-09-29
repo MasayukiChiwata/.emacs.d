@@ -6,7 +6,18 @@
   (defconst IS-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
 #+END_SRC
 
+*** ターミナル判定
+#+BEGIN_SRC emacs-lisp
+  (defconst IS-TERM (eq window-system nil))
+#+END_SRC
+
 ** 基本設定
+*** フォント
+#+BEGIN_SRC emacs-lisp
+  (when (member "PlemolJP35 Console NF" (font-family-list))
+    (add-to-list 'default-frame-alist '(font . "PlemolJP35 Console NF-10")))
+#+END_SRC
+
 *** 行番号を表示
 #+BEGIN_SRC emacs-lisp
   (global-display-line-numbers-mode t)
@@ -123,9 +134,22 @@
 ** clipetty(OSC52)
 #+BEGIN_SRC emacs-lisp
   (use-package clipetty
+    :if (not window-system)
     :hook (after-init . global-clipetty-mode)
     )
 #+END_SRC
+
+** vterm
+以下のパッケージをインストールしておく。
+#+BEGIN_SRC shell
+  sudo apt install cmake libtool libtool-bin
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm)
+#+END_SRC
+
 ** smartparens
 括弧を自動補完する。
 #+BEGIN_SRC emacs-lisp
@@ -175,10 +199,6 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     :hook (after-init . global-company-mode)
     :bind
     ("C-c m" . company-complete) ;; 補完を起動する
-    (:map company-active-map
-          ("<return>" . nil)
-          ("RET" . nil)
-          ("<tab>" . company-complete-selection))
     :custom
     (company-backends '((company-capf company-yasnippet)))
     (company-minimum-prefix-length 2)
@@ -372,5 +392,5 @@ M-x revert-buffer
 **** 見出し間のジャンプ
 C-c C-n, C-c C-p
 
-**** 一括開閉
+*** 一括開閉
 C-u C-i
