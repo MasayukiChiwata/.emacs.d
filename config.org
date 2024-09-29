@@ -139,7 +139,7 @@
     )
 #+END_SRC
 
-** vterm
+** [[https://github.com/akermu/emacs-libvterm][vterm]]
 以下のパッケージをインストールしておく。
 #+BEGIN_SRC shell
   sudo apt install cmake libtool libtool-bin
@@ -149,13 +149,17 @@
   (use-package vterm
     :hook ((vterm-mode . (lambda () (display-line-numbers-mode 0)))
            (vterm-mode . (lambda ()   (setq show-trailing-whitespace nil)))
-           ))
+           )
+    :custom
+    (vterm-max-scrollback 10000)
+    )
 #+END_SRC
 
 ** smartparens
 括弧を自動補完する。
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
+    :disabled t
     :config
     (require 'smartparens-config)
     (smartparens-global-mode 1))
@@ -253,7 +257,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 #+END_SRC
 
-** ivy
+** [[https://github.com/abo-abo/swiper?tab=readme-ov-file#ivy][ivy]]
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :custom
@@ -266,7 +270,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 #+END_SRC
 
-** counsel
+** [[https://github.com/abo-abo/swiper?tab=readme-ov-file#counsel][counsel]]
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
     :after (ivy)
@@ -275,7 +279,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 #+END_SRC
 
-** swiper
+** [[https://github.com/abo-abo/swiper?tab=readme-ov-file#swiper][swiper]]
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
     :after (ivy)
@@ -332,16 +336,12 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 #+END_SRC
 
 ** org-mode
-*** コードブロックではネイティブモードのTAB動作
-#+BEGIN_SRC emacs-lisp
-  (setq org-src-tab-acts-natively t)
-#+END_SRC
-
 *** インデントモード
 見出しやリストなどの階層構造に応じて自動的にインデントを調整する
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+END_SRC
+
 *** 保存時にバッファ全体をインデント
 #+BEGIN_SRC emacs-lisp
   (defun my-org-indent-buffer ()
@@ -408,4 +408,4 @@ M-x revert-buffer
 C-c C-n, C-c C-p
 
 *** 一括開閉
-C-u C-test
+C-u C-i
