@@ -137,7 +137,6 @@
 *** evil
 #+BEGIN_SRC emacs-lisp
   (use-package evil
-    :disabled t
     :init
     (setq evil-want-keybinding nil)
     (setq evil-undo-system 'undo-fu)
@@ -146,8 +145,8 @@
     (evil-mode 1)
     ;; バッファ全体を選択するテキストオブジェクトを定義
     (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
-                             "Select entire buffer."
-                             (evil-range (point-min) (point-max) type))
+      "Select entire buffer."
+      (evil-range (point-min) (point-max) type))
     (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
     (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
     )
@@ -414,6 +413,18 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 #+END_SRC
 
+** [[https://github.com/purcell/emacs-reformatter][reformatter]]
+#+BEGIN_SRC emacs-lisp
+  (use-package reformatter
+    :config
+    (reformatter-define prettier-format
+      :program "npx"
+      :args `("prettier" "--stdin-filepath" ,(buffer-file-name))
+      :lighter " Prettier"
+      )
+    )
+#+END_SRC
+
 ** org-mode
 *** インデントモード
 見出しやリストなどの階層構造に応じて自動的にインデントを調整する
@@ -442,7 +453,9 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 ** typescript-mode
 #+BEGIN_SRC emacs-lisp
   (use-package typescript-mode
-    :hook (typescript-mode . eglot-ensure)
+    :hook
+    (typescript-mode . eglot-ensure)
+    (typescript-mode . prettier-format-on-save-mode)
     :config
     (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
     )
