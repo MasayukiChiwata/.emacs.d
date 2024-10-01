@@ -14,8 +14,10 @@
 ** 基本設定
 *** フォント
 #+BEGIN_SRC emacs-lisp
-  (when (member "PlemolJP35 Console NF" (font-family-list))
-    (add-to-list 'default-frame-alist '(font . "PlemolJP35 Console NF-10")))
+  (when (member "PlemolJP Console NF" (font-family-list))
+    (add-to-list 'default-frame-alist '(font . "PlemolJP Console NF-10")))
+
+  (set-language-environment "Japanese")
 #+END_SRC
 
 *** 対応する括弧を強調
@@ -129,6 +131,51 @@
 *** 行番号トグル
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
+#+END_SRC
+
+** evil
+*** evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :disabled t
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-undo-system 'undo-fu)
+    (setq evil-want-C-i-jump nil) ;; C-iをTabに割当て
+    :config
+    (evil-mode 1)
+    ;; バッファ全体を選択するテキストオブジェクトを定義
+    (evil-define-text-object evil-buffer-text-object (count &optional beg end type)
+                             "Select entire buffer."
+                             (evil-range (point-min) (point-max) type))
+    (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
+    (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
+    )
+#+END_SRC
+*** evil-collection
+https://github.com/emacs-evil/evil-collection
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init)
+    )
+#+END_SRC
+*** evil-surround
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config
+    (global-evil-surround-mode 1)
+    )
+#+END_SRC
+*** evil-commentary
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-commentary
+    :after evil
+    :config
+    (evil-commentary-mode)
+    )
 #+END_SRC
 
 ** clipetty(OSC52)
@@ -349,6 +396,21 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)
+    )
+#+END_SRC
+** autorevert
+他プロセスの編集をバッファに反映
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert
+    :init
+    (global-auto-revert-mode +1))
+#+END_SRC
+
+** path-headerline-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package path-headerline-mode
+    :config
+    (path-headerline-mode +1)
     )
 #+END_SRC
 
