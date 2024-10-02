@@ -102,6 +102,11 @@
   (setq native-comp-async-report-warnings-errors 'silent)
 #+END_SRC
 
+*** マウス
+#+BEGIN_SRC emacs-lisp
+  (xterm-mouse-mode t)
+#+END_SRC
+
 *** Windows最適化
 #+BEGIN_SRC emacs-lisp
   (when IS-WINDOWS
