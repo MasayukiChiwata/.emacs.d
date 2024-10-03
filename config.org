@@ -195,7 +195,9 @@ https://github.com/emacs-evil/evil-collection
       "f"   'counsel-projectile-find-file
       "r"   'counsel-recentf
       "b"   'ivy-switch-buffer
-      "x"   'execute-extended-command))
+      "x"   'execute-extended-command
+      "q" 'suspend-frame
+      ))
 #+END_SRC
 ** clipetty(OSC52)
 #+BEGIN_SRC emacs-lisp
@@ -277,10 +279,37 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
   (use-package eglot)
 #+END_SRC
 
-** flycheck
+** flymake
+*** flymake
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck)
+  (use-package flymake
+    :custom
+    ( flymake-show-diagnostic-at-point t)
+    ( flymake-diagnostic-at-point-timer-delay 0.1)
+    :bind (nil
+           :map flymake-mode-map
+           ("C-c C-p" . flymake-goto-prev-error)
+           ("C-c C-n" . flymake-goto-next-error)
+           )
+    )
 #+END_SRC
+
+*** flymake-diagnostic-at-point
+#+BEGIN_SRC emacs-lisp
+  (use-package flymake-diagnostic-at-point
+    :disabled t
+    :after flymake
+    :config
+    (add-hook 'flymake-mode-hook #'flymake-diagnostic-at-point-mode)
+    (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package flymake-posframe
+  ;;   :after flymake
+  ;;   :hook (flymake-mode . flymake-posframe-mode))
+#+END_SRC
+
 ** company
 #+BEGIN_SRC emacs-lisp
   (use-package company
@@ -425,6 +454,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 #+END_SRC
 
 ** path-headerline-mode
+ヘッドラインにファイルパスを表示する。
 #+BEGIN_SRC emacs-lisp
   (use-package path-headerline-mode
     :config
