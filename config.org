@@ -182,6 +182,21 @@ https://github.com/emacs-evil/evil-collection
     )
 #+END_SRC
 
+** general.el
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :config
+    (general-create-definer my/leader-key-def
+      :states '(normal visual motion)
+      :keymaps 'override
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    (my/leader-key-def
+      "f"   'counsel-projectile-find-file
+      "r"   'counsel-recentf
+      "b"   'ivy-switch-buffer
+      "x"   'execute-extended-command))
+#+END_SRC
 ** clipetty(OSC52)
 #+BEGIN_SRC emacs-lisp
   (use-package clipetty
@@ -227,10 +242,9 @@ https://github.com/emacs-evil/evil-collection
 括弧を自動補完する。
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
-    :disabled t
     :config
     (require 'smartparens-config)
-    (smartparens-global-mode 1))
+    (smartparens-global-strict-mode 1))
 #+END_SRC
 
 ** dired-subtree
