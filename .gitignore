@@ -7,6 +7,7 @@ server/
 transient/
 undo-fu-session/
 var/
+elpa/
 
 config.el
 projectile-bookmarks.eld

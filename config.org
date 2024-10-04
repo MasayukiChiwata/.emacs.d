@@ -243,10 +243,12 @@ https://github.com/emacs-evil/evil-collection
 ** smartparens
 括弧を自動補完する。
 #+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :config
-    (require 'smartparens-config)
-    (smartparens-global-strict-mode 1))
+    (use-package smartparens
+      :config
+      (require 'smartparens-config)
+      ;; (smartparens-global-strict-mode 1)
+      )
+
 #+END_SRC
 
 ** dired-subtree
@@ -276,7 +278,17 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 
 ** eglot
 #+BEGIN_SRC emacs-lisp
-  (use-package eglot)
+    (use-package eglot
+      :config
+      (setq eglot-server-programs
+            '(
+              ;; TypeScript ファイルには TypeScript の言語サーバーを使用
+              (typescript-mode . ("typescript-language-server" "--stdio"))
+              ;; JavaScript ファイルには JavaScript の言語サーバーを使用
+              ;; (js-mode . ("javascript-typescript-stdio"))
+              ;; (json-mode . nil)
+              )
+              ))
 #+END_SRC
 
 ** flymake
@@ -507,6 +519,15 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
         org-mouse-1-follows-link t ; マウスクリックでリンク先を開く
         )
 #+END_SRC
+** JSON-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :hook
+    ;; (json-mode . eglot-ensure)
+    (json-mode . prettier-format-on-save-mode)
+    )
+#+END_SRC
+
 ** typescript-mode
 #+BEGIN_SRC emacs-lisp
   (use-package typescript-mode
@@ -517,7 +538,6 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
     )
 #+END_SRC
-
 
 LSPサーバーのインストール
 #+BEGIN_SRC
