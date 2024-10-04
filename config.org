@@ -196,7 +196,7 @@ https://github.com/emacs-evil/evil-collection
       "r"   'counsel-recentf
       "b"   'ivy-switch-buffer
       "x"   'execute-extended-command
-      "q" 'suspend-frame
+      "q"   'suspend-frame
       ))
 #+END_SRC
 ** clipetty(OSC52)
@@ -471,6 +471,14 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
       :args `("prettier" "--stdin-filepath" ,(buffer-file-name))
       :lighter " Prettier"
       )
+    )
+#+END_SRC
+
+** rg
+#+BEGIN_SRC emacs-lisp
+  (use-package rg
+    :config
+    (rg-enable-default-bindings)
     )
 #+END_SRC
 
