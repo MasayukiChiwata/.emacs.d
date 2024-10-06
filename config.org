@@ -36,6 +36,12 @@
   (setq make-backup-files nil)
 #+END_SRC
 
+*** ロックファイル
+ロックファイルを作成しない。
+#+BEGIN_SRC emacs-lisp
+  (setq create-lockfiles nil)
+#+END_SRC
+
 *** オートセーブファイル
 オートセーブファイルを作らない。
 #+BEGIN_SRC emacs-lisp
@@ -154,6 +160,7 @@
       (evil-range (point-min) (point-max) type))
     (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
     (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
+    (define-key evil-insert-state-map (kbd "jk") 'evil-normal-state)
     )
 #+END_SRC
 *** evil-collection
@@ -243,11 +250,11 @@ https://github.com/emacs-evil/evil-collection
 ** smartparens
 括弧を自動補完する。
 #+BEGIN_SRC emacs-lisp
-    (use-package smartparens
-      :config
-      (require 'smartparens-config)
-      ;; (smartparens-global-strict-mode 1)
-      )
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    ;; (smartparens-global-strict-mode 1)
+    )
 
 #+END_SRC
 
@@ -278,17 +285,17 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 
 ** eglot
 #+BEGIN_SRC emacs-lisp
-    (use-package eglot
-      :config
-      (setq eglot-server-programs
-            '(
-              ;; TypeScript ファイルには TypeScript の言語サーバーを使用
-              (typescript-mode . ("typescript-language-server" "--stdio"))
-              ;; JavaScript ファイルには JavaScript の言語サーバーを使用
-              ;; (js-mode . ("javascript-typescript-stdio"))
-              ;; (json-mode . nil)
-              )
-              ))
+  (use-package eglot
+    :config
+    (setq eglot-server-programs
+          '(
+            ;; TypeScript ファイルには TypeScript の言語サーバーを使用
+            (typescript-mode . ("typescript-language-server" "--stdio"))
+            ;; JavaScript ファイルには JavaScript の言語サーバーを使用
+            ;; (js-mode . ("javascript-typescript-stdio"))
+            ;; (json-mode . nil)
+            )
+          ))
 #+END_SRC
 
 ** flymake
