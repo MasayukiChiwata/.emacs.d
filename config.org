@@ -160,7 +160,8 @@
       (evil-range (point-min) (point-max) type))
     (define-key evil-inner-text-objects-map "e" 'evil-buffer-text-object)
     (define-key evil-outer-text-objects-map "e" 'evil-buffer-text-object)
-    (define-key evil-insert-state-map (kbd "jk") 'evil-normal-state)
+    (define-key evil-normal-state-map "x" 'delete-forward-char)
+    (define-key evil-normal-state-map "X" 'delete-backward-char)
     )
 #+END_SRC
 *** evil-collection
@@ -187,6 +188,19 @@ https://github.com/emacs-evil/evil-collection
     :config
     (evil-commentary-mode)
     )
+#+END_SRC
+
+*** evil-escape
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-escape
+    :after evil
+    :init
+    ;; jk でノーマルモードに戻る
+    (setq-default evil-escape-key-sequence "jk")
+    ;; キーシーケンスの入力間隔を設定（秒）
+    (setq-default evil-escape-delay 0.2)
+    :config
+    (evil-escape-mode 1))
 #+END_SRC
 
 ** general.el
@@ -253,7 +267,7 @@ https://github.com/emacs-evil/evil-collection
   (use-package smartparens
     :config
     (require 'smartparens-config)
-    ;; (smartparens-global-strict-mode 1)
+    (smartparens-global-strict-mode 1)
     )
 
 #+END_SRC
@@ -529,9 +543,9 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
 ** JSON-mode
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
-    :hook
+    ;; :hook
     ;; (json-mode . eglot-ensure)
-    (json-mode . prettier-format-on-save-mode)
+    ;; (json-mode . prettier-format-on-save-mode)
     )
 #+END_SRC
 
@@ -567,6 +581,12 @@ npm install -g typescript-language-server typescript
 ** docker-compose-mode
 #+BEGIN_SRC emacs-lisp
   (use-package docker-compose-mode)
+#+END_SRC
+
+** prisma-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package prisma-mode
+    :straight (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 #+END_SRC
 
 ** Tips
