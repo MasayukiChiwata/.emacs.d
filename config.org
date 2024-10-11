@@ -144,6 +144,15 @@
   (global-set-key (kbd "C-c n") 'display-line-numbers-mode)
 #+END_SRC
 
+*** 折りたたみ
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook
+            '(lambda ()
+               (hs-minor-mode 1)))
+  (global-set-key (kbd "C-c o") 'hs-toggle-hiding)
+  (define-key global-map (kbd "C-c i") 'hs-hide-all)
+#+END_SRC
+
 ** evil
 *** evil
 #+BEGIN_SRC emacs-lisp
@@ -267,7 +276,7 @@ https://github.com/emacs-evil/evil-collection
   (use-package smartparens
     :config
     (require 'smartparens-config)
-    (smartparens-global-strict-mode 1)
+    ;; (smartparens-global-strict-mode 1)
     )
 
 #+END_SRC
@@ -397,6 +406,7 @@ Diredバッファ内でディレクトリを展開・折りたたみ。
     )
 
   (use-package yasnippet-snippets
+    :disabled t
     :after yasnippet
     )
 #+END_SRC
