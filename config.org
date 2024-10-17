@@ -276,6 +276,7 @@ https://github.com/emacs-evil/evil-collection
   (use-package smartparens
     :config
     (require 'smartparens-config)
+    (smartparens-global-mode 1)
     ;; (smartparens-global-strict-mode 1)
     )
 
